@@ -41,15 +41,18 @@ class GameFragment : Fragment() {
 
     private lateinit var binding: GameFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         // Inflate view and obtain an instance of the binding class
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.game_fragment,
-                container,
-                false
+            inflater,
+            R.layout.game_fragment,
+            container,
+            false
         )
 
         resetList()
@@ -60,7 +63,6 @@ class GameFragment : Fragment() {
         updateScoreText()
         updateWordText()
         return binding.root
-
     }
 
     /**
@@ -68,27 +70,27 @@ class GameFragment : Fragment() {
      */
     private fun resetList() {
         wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
+            "queen",
+            "hospital",
+            "basketball",
+            "cat",
+            "change",
+            "snail",
+            "soup",
+            "calendar",
+            "sad",
+            "desk",
+            "guitar",
+            "home",
+            "railway",
+            "zebra",
+            "jelly",
+            "car",
+            "crow",
+            "trade",
+            "bag",
+            "roll",
+            "bubble"
         )
         wordList.shuffle()
     }
@@ -110,13 +112,12 @@ class GameFragment : Fragment() {
      */
     private fun nextWord() {
         if (!wordList.isEmpty()) {
-            //Select and remove a word from the list
+            // Select and remove a word from the list
             word = wordList.removeAt(0)
         }
         updateWordText()
         updateScoreText()
     }
-
 
     /** Methods for updating the UI **/
 
