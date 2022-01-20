@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android.guesstheword.R
@@ -57,32 +58,40 @@ class GameFragment : Fragment() {
         binding.endGameButton.setOnClickListener { onEndGame() }
         binding.correctButton.setOnClickListener { onCorrect() }
         binding.skipButton.setOnClickListener { onSkip() }
-        updateScoreText()
-        updateWordText()
+
+        viewModel.score.observe(
+            viewLifecycleOwner,
+            Observer { newScore ->
+                binding.scoreText.text = newScore.toString()
+            }
+        )
+
+        viewModel.word.observe(
+            viewLifecycleOwner,
+            Observer { newWord ->
+                binding.wordText.text = newWord
+            }
+        )
+
+        viewModel.eventGameFinish.observe(
+            viewLifecycleOwner,
+            Observer<Boolean> { hasFinished ->
+                if (hasFinished) gameFinished()
+            }
+        )
+
         return binding.root
     }
 
     private fun onSkip() {
         viewModel.onSkip()
-        updateScoreText()
-        updateWordText()
     }
 
     private fun onCorrect() {
         viewModel.onCorrect()
-        updateScoreText()
-        updateWordText()
     }
 
     /** Methods for updating the UI **/
-
-    private fun updateWordText() {
-        binding.wordText.text = viewModel.word
-    }
-
-    private fun updateScoreText() {
-        binding.scoreText.text = viewModel.score.toString()
-    }
 
     private fun onEndGame() {
         gameFinished()
@@ -91,7 +100,8 @@ class GameFragment : Fragment() {
     private fun gameFinished() {
         Toast.makeText(activity, "Game has just finished", Toast.LENGTH_SHORT).show()
         val action = GameFragmentDirections.actionGameToScore()
-        action.score = viewModel.score
+        action.score = viewModel.score.value ?: 0
         NavHostFragment.findNavController(this).navigate(action)
+        viewModel.onGameFinishComplete()
     }
 }
